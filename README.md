@@ -38,11 +38,11 @@
 
 ```bash
 # Скачать скрипт
-wget https://raw.githubusercontent.com/YOUR_REPO/main/vps_protection/firewall-guard.sh
+wget https://raw.githubusercontent.com/EvgSpd/main/vps_protection/firewall-guard.sh
 chmod +x firewall-guard.sh
 
 # Или клонировать репозиторий
-git clone https://github.com/YOUR_REPO/vps_protection.git
+git clone https://github.com/EvgSpd/vps_protection.git
 cd vps_protection
 chmod +x firewall-guard.sh
 ```
@@ -454,8 +454,8 @@ A: Да, включается через ENABLE_IPV6=true в конфигура�
 
 ## Поддержка
 
-- GitHub Issues: https://github.com/YOUR_REPO/issues
-- Документация: https://github.com/YOUR_REPO/vps_protection
+- GitHub Issues: https://github.com/EvgSpd/issues
+- Документация: https://github.com/EvgSpd/vps_protection
 
 ---
 
