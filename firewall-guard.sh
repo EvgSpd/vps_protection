@@ -12,7 +12,7 @@
 # Much lighter than fail2ban, uses iptables hashlimit module
 #
 
-set -e
+#set -e
 
 VERSION="1.0.0"
 SCRIPT_NAME="FirewallGuard"
