@@ -12,7 +12,8 @@
 # Much lighter than fail2ban, uses iptables hashlimit module
 #
 
-#set -e
+# Note: Not using 'set -e' to allow graceful handling of duplicate entries
+set -u
 
 VERSION="1.0.0"
 SCRIPT_NAME="FirewallGuard"
@@ -65,7 +66,7 @@ print_colored() {
 }
 
 print_banner() {
-    clear
+    #clear
     echo -e "${CYAN}${BOLD}"
     cat << "EOF"
     ╔═══════════════════════════════════════════════════════╗
@@ -106,11 +107,11 @@ check_dependencies() {
 }
 
 detect_interface() {
-    if [[ -z "$DEFAULT_INTERFACE" ]]; then
-        DEFAULT_INTERFACE=$(ip route get 1.2.3.4 2>/dev/null | awk '{print $5; exit}')
+    if [[ -z "${DEFAULT_INTERFACE:-}" ]]; then
+        DEFAULT_INTERFACE=$(ip route get 1.2.3.4 2>/dev/null | awk '{print $5; exit}') || true
     fi
     
-    if [[ -z "$DEFAULT_INTERFACE" ]]; then
+    if [[ -z "${DEFAULT_INTERFACE:-}" ]]; then
         print_colored "$RED" "Error: Cannot detect default network interface!"
         exit 1
     fi
@@ -120,7 +121,7 @@ detect_interface() {
 
 load_config() {
     if [[ -f "$CONFIG_FILE" ]]; then
-        source "$CONFIG_FILE"
+        source "$CONFIG_FILE" || true
         print_colored "$GREEN" "✓ Configuration loaded from $CONFIG_FILE"
     fi
 }
@@ -202,11 +203,11 @@ apply_whitelist() {
         if [[ "$line" =~ : ]]; then
             # IPv6
             if [[ "$ENABLE_IPV6" == "true" ]]; then
-                ipset add ${PROTECTION_NAME}-allow6 "$line" 2>/dev/null && ((count++))
+                ipset add ${PROTECTION_NAME}-allow6 "$line" 2>/dev/null && ((count++)) || true
             fi
         else
             # IPv4
-            ipset add ${PROTECTION_NAME}-allow "$line" 2>/dev/null && ((count++))
+            ipset add ${PROTECTION_NAME}-allow "$line" 2>/dev/null && ((count++)) || true
         fi
     done < "$WHITELIST_FILE"
     
@@ -542,11 +543,11 @@ main() {
             enable_protection
             ;;
         disable)
-            print_banner
+            #print_banner
             disable_protection
             ;;
         status)
-            print_banner
+            #print_banner
             show_status
             ;;
         unblock)
@@ -564,7 +565,7 @@ main() {
             print_colored "$YELLOW" "Run '$0 enable' to apply changes"
             ;;
         help|--help|-h)
-            print_banner
+            #print_banner
             show_help
             ;;
         *)
